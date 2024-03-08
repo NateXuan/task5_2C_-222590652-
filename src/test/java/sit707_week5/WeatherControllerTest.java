@@ -4,7 +4,9 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 public class WeatherControllerTest {
 	
@@ -61,27 +63,25 @@ public class WeatherControllerTest {
         Assert.assertEquals(wController.getTemperatureAverageFromCache(), averageTemp, 0.001);
 	}
 	
+	@Test
+	public void testTemperaturePersist() {
+        System.out.println("+++ testTemperaturePersist +++");
+        
+        // Use current time as a reference for validation
+        String now = new SimpleDateFormat("H:m:s").format(new Date());
+        
+        // Persist temperature and get the time of persistence
+        String persistTime = wController.persistTemperature(10, 19.5);
+        
+        // Output for verification
+        System.out.println("Persist time: " + persistTime + ", now: " + now);
+        
+        // Adjust the test to allow for some leeway in time difference, if necessary
+        Assert.assertEquals("Persist time should match current time", now, persistTime);
+    }
+	
 	@After
     public void tearDown() {
         wController.close();
     }
-	
-	@Test
-	public void testTemperaturePersist() {
-		/*
-		 * Remove below comments ONLY for 5.3C task.
-		 */
-//		System.out.println("+++ testTemperaturePersist +++");
-//		
-//		// Initialise controller
-//		WeatherController wController = WeatherController.getInstance();
-//		
-//		String persistTime = wController.persistTemperature(10, 19.5);
-//		String now = new SimpleDateFormat("H:m:s").format(new Date());
-//		System.out.println("Persist time: " + persistTime + ", now: " + now);
-//		
-//		Assert.assertTrue(persistTime.equals(now));
-//		
-//		wController.close();
-	}
 }
